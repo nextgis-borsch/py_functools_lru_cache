@@ -164,12 +164,12 @@ macro(build_py ver)
         OUTPUT_QUIET ERROR_QUIET
     )
 
-    add_custom_target(build_py${ver} ALL
-        COMMAND ${CMAKE_COMMAND} -E env "${FLAGS}"
-        ${PYTHON${ver}_EXECUTABLE} setup.py build_ext ${BUILD_INCLUDES}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${OUT_DIR_NAME}
-        VERBATIM
-    )
+    # add_custom_target(build_py${ver} ALL
+    #     COMMAND ${CMAKE_COMMAND} -E env "${FLAGS}"
+    #     ${PYTHON${ver}_EXECUTABLE} setup.py build_ext ${BUILD_INCLUDES}
+    #     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${OUT_DIR_NAME}
+    #     VERBATIM
+    # )
 
     if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         set(SETUP_OPTS ${SETUP_OPTS} --no-compile --single-version-externally-managed --record=rekord.txt --prefix=${CMAKE_CURRENT_BINARY_DIR}/inst_tmp)

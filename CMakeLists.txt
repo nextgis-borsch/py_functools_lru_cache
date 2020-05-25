@@ -3,7 +3,7 @@
 # Purpose:  CMake build scripts
 # Author:   Dmitry Baryshnikov, dmitry.baryshnikov@nexgis.com
 ################################################################################
-# Copyright (C) 2017-2018, NextGIS <info@nextgis.com>
+# Copyright (C) 2017-2020, NextGIS <info@nextgis.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -156,13 +156,6 @@ if(NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${OUT_DIR_NAME})
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_BINARY_DIR}/${OUT_NAME})
 endif()
 
-# Fix dependency
-# setup_requires = setuptools_scm >= 1.15.0
-
-file(READ ${CMAKE_CURRENT_BINARY_DIR}/${OUT_DIR_NAME}/setup.cfg _SETUP_CFG)
-string(REGEX REPLACE "setup_requires = setuptools_scm >= 1.15.0" "setup_requires = setuptools_scm <= 3.5.0" _SETUP_CFG "${_SETUP_CFG}" )
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${OUT_DIR_NAME}/setup.cfg "${_SETUP_CFG}")
-
 macro(build_py ver)
     status_message("Configuring ...")
     execute_process(COMMAND ${CMAKE_COMMAND} -E env "${FLAGS}"
@@ -226,6 +219,11 @@ endmacro()
 
 
 if(PYTHON2_EXECUTABLE)
+    # Fix dependency
+
+    file(READ ${CMAKE_CURRENT_BINARY_DIR}/${OUT_DIR_NAME}/setup.cfg _SETUP_CFG)
+    string(REGEX REPLACE "setup_requires = setuptools_scm >= 1.15.0" "setup_requires = setuptools_scm <= 3.5.0" _SETUP_CFG "${_SETUP_CFG}" )
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${OUT_DIR_NAME}/setup.cfg "${_SETUP_CFG}")
     build_py(2)
 endif()
 

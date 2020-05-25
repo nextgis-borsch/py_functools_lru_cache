@@ -36,7 +36,7 @@ if(NOT DEFINED PACKAGE_BUGREPORT)
 endif()
 
 # some init settings
-set(CMAKE_COLOR_MAKEFILE ON)
+set(CMAKE_COLOR_MAKEfile ON)
 # set path to additional CMake modules
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
@@ -104,7 +104,7 @@ execute_process(COMMAND ${PYTHON_EXECUTABLE}
 
 list(GET PACKAGE_DETAILS 0 DOWNLOAD_URL)
 list(GET PACKAGE_DETAILS 1 VERSION)
-list(GET PACKAGE_DETAILS 2 PROJECT_CPACK_FILENAME)
+list(GET PACKAGE_DETAILS 2 PROJECT_CPACK_fileNAME)
 
 report_version(${PROJECT_NAME} ${VERSION})
 
@@ -155,6 +155,13 @@ if(NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${OUT_DIR_NAME})
     status_message("Extract ${CMAKE_CURRENT_BINARY_DIR}/${OUT_NAME}")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_BINARY_DIR}/${OUT_NAME})
 endif()
+
+# Fix dependency
+# setup_requires = setuptools_scm >= 1.15.0
+
+file(READ ${CMAKE_CURRENT_BINARY_DIR}/${OUT_DIR_NAME}/setup.cfg _SETUP_CFG)
+string(REGEX REPLACE "setup_requires = setuptools_scm >= 1.15.0" "setup_requires = setuptools_scm <= 3.5.0" _SETUP_CFG "${_SETUP_CFG}" )
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${OUT_DIR_NAME}/setup.cfg "${_SETUP_CFG}")
 
 macro(build_py ver)
     status_message("Configuring ...")
@@ -241,9 +248,9 @@ set(CPACK_PACKAGE_RELOCATABLE TRUE)
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 set(CPACK_GENERATOR "ZIP")
 set(CPACK_MONOLITHIC_INSTALL ON)
-set(CPACK_STRIP_FILES TRUE)
+set(CPACK_STRIP_fileS TRUE)
 
 # Get cpack zip archive name
-set(CPACK_PACKAGE_FILE_NAME ${PROJECT_CPACK_FILENAME})
+set(CPACK_PACKAGE_file_NAME ${PROJECT_CPACK_fileNAME})
 
 include(CPack)
